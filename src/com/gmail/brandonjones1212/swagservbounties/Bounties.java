@@ -1,10 +1,11 @@
-package edu.berkeley.andwen.swagservbounties;
+package com.gmail.brandonjones1212.swagservbounties;
 
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 public class Bounties extends JavaPlugin {
 	private SignListener signListener;
