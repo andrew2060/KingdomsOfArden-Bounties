@@ -1,7 +1,7 @@
 name: Swagserv-Bounties
-main: edu.berkeley.andwen.swagservbounties.Bounties
+main: com.gmail.brandonjones121.swagservbounties.Bounties
 load: POSTWORLD
-version: 0.2-CCDev
+version: 0.02-CCDev
 description: Allows bounties through sign commands.
 depend: [Vault]
 commands:
