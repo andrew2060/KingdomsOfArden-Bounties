@@ -1,7 +1,7 @@
 name: Swagserv-Bounties
 main: edu.berkeley.andwen.swagservbounties.Bounties
 load: POSTWORLD
-version: 0.1-AndrewFork
+version: 0.2-CCDev
 description: Allows bounties through sign commands.
 depend: [Vault]
 commands:
