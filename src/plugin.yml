@@ -5,3 +5,8 @@ version: 0.02-CCDev
 description: Allows bounties through sign commands.
 depend: [Vault]
 commands:
+  bounty:
+    description: Swagserv-Bounties Bounty creation command.
+    usage: /<command> [target] [amount] [numberofkills]
+    permission: swagserv.bountycreate
+    permission-message: You don't have the requisite permissions to do this action!

@@ -6,10 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import edu.berkeley.andwen.swagservbounties.*;
+
 
 public class Bounties extends JavaPlugin {
 	private SignListener signListener;
-
+	private CommandHandler commandHandler;
 	public Economy economy;
 	private boolean setupEconomy()
     {
@@ -23,6 +25,8 @@ public class Bounties extends JavaPlugin {
 	public void onEnable() {
 		signListener = new SignListener(this);
 		setupEconomy();
+		commandHandler = new CommandHandler(this);
+		getCommand("bounty").setExecutor(commandHandler);
 		getServer().getPluginManager().registerEvents(signListener, this);
 		Player[] p = getServer().getOnlinePlayers();
 		String[] playerNames = new String[p.length];
