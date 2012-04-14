@@ -1,0 +1,6 @@
+name: Swagserv-Bounties
+main: me.jones.bounties.Bounties
+version: 0.1-AndrewFork
+description: Allows bounties through sign commands.
+depend: [Vault]
+commands:
