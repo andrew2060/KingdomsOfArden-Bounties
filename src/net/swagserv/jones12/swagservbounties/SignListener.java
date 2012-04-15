@@ -1,4 +1,5 @@
-package com.gmail.brandonjones1212.swagservbounties;
+package net.swagserv.jones12.swagservbounties;
+
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

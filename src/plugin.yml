@@ -1,12 +1,12 @@
 name: Swagserv-Bounties
-main: com.gmail.brandonjones1212.swagservbounties.Bounties
+main: net.swagserv.jones12.swagservbounties.Bounties
 load: POSTWORLD
-version: 0.02-CCDev
+version: 0.03-CCDev
 description: Allows bounties through sign commands.
 depend: [Vault]
 commands:
   bounty:
     description: Swagserv-Bounties Bounty creation command.
-    usage: /<command> [target] [amount] [numberofkills]
+    usage: The proper command format is /<command> [create/delete] [player/faction] [target] [amount] [killcount]
     permission: swagserv.bountycreate
     permission-message: You don't have the requisite permissions to do this action!
