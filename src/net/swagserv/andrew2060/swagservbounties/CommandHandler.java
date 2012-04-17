@@ -9,24 +9,24 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+//import com.massivecraft.factions.Faction;
+//import com.massivecraft.factions.P;
 //Command Handling for /bounty: faction bounties in FactionCommandHandler
 public class CommandHandler implements CommandExecutor {
 	private Bounties plugin;
-	private P factions;
+	//private P factions;
 	public CommandHandler(Bounties plugin) {
 		this.plugin = plugin;
 	}
 	Player player = null;
 	public String targetplayer;
 	public String bountyplayer;
-	public Player senderfactionsplayer;
-	public Player targetfactionsplayer;
-	private String senderFactionID;
-	private String targetFactionID;
-	public int bountyamount;
-	public int killcount;
+	//private Player senderfactionsplayer;
+	//private Player targetfactionsplayer;
+	//private String senderFactionID;
+	//private String targetFactionID;
+	public double bountyamount;
+	public double killcount;
 	double temp=0.00;
 	double accntBalance = 0.00;
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
@@ -49,29 +49,31 @@ public class CommandHandler implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("create")){
 				bountyplayer = sender.getName();
 				targetplayer = args[2];
+				//Check if Factions is enabled
+				//if (Bounties.factionisEnabled = true);
 				//Begin Factions Variable section- remove if no desire to tie in with factions//
-				Player senderfactionsplayer = Bukkit.getServer().getPlayer(sender.getName());
-				Player targetfactionsplayer = Bukkit.getServer().getPlayer(args[2]);
+				//Player senderfactionsplayer = Bukkit.getServer().getPlayer(sender.getName());
+				//Player targetfactionsplayer = Bukkit.getServer().getPlayer(args[3]);
 				//DEBUG VARIABLE CONFIRM: REMOVE IN FINAL RELEASE
-				sender.sendMessage("senderfactionsplayer ==" + senderfactionsplayer);
-				sender.sendMessage("targetfactionsplayer ==" + targetfactionsplayer);
+				//sender.sendMessage("senderfactionsplayer ==" + senderfactionsplayer);
+				//sender.sendMessage("targetfactionsplayer ==" + targetfactionsplayer);
 				//
-				//senderFactionID = factions.getFactionId(senderfactionsplayer); /Non Functional
-				//targetFactionID = factions.getFactionID(targetfactionsplayer); /Non Functional
+				//senderFactionID = factions.getPlayerFactionTag(Bukkit.getServer().getPlayer(sender.getName())); //Non Functional
+				//targetFactionID = factions.getPlayerFactionTag(Bukkit.getServer().getPlayer(args[2])); //Non Functional
 				//FACTION ID DEBUG--TO BE REMOVED--
-				sender.sendMessage("senderFactionID ==" + senderFactionID);
-				sender.sendMessage("targetFactionID ==" + targetFactionID);
+				//sender.sendMessage("senderFactionTag ==" + senderFactionID);
+				//sender.sendMessage("targetFactionTag ==" + targetFactionID);
 				//
 				//End Factions Variable Defining//
-				int bountyamount = Integer.parseInt(args[3]); //This Needs Exception Handling for non-integer inputs
-				int killcount = Integer.parseInt(args[4]);
+				double bountyamount = Integer.parseInt(args[3]); //This Needs Exception Handling for non-integer inputs
+				double killcount = Integer.parseInt(args[4]);
 				//For Players
 				if(args[1].equalsIgnoreCase ("player")) {
 					if(plugin.permission.has(sender, "swagserv.bountycreate.player")) { //Permissions Check
-						//No need to include factions chat, since this is being cancelled anyways
 						//Begin checking validity of command
 						//Check to ensure player exists
 						if(Bukkit.getServer().getPlayer(targetplayer) == null) {
+							//No need to include factions check, since this is being cancelled anyways
 							sender.sendMessage("Target Player Does Not Exist or is not Online!");
 							return true;
 						}
@@ -80,7 +82,7 @@ public class CommandHandler implements CommandExecutor {
 							//if(InsertFactionAllianceCheckHere)
 							//Begin Economy Section (Derived from com.gmail.brandonjones1212.swagservbounties.SignListener.java (deprecated))
 							accntBalance = plugin.economy.getBalance(bountyplayer);
-							if(accntBalance<=500+bountyamount) {
+							if(accntBalance < 500+bountyamount) {
 								temp = (500+bountyamount)-accntBalance;
 					
 								sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on " + targetplayer + " for $" + bountyamount + " as well as the $500 bounty posting fee");
@@ -101,7 +103,7 @@ public class CommandHandler implements CommandExecutor {
 				}
 				if(args[1].equalsIgnoreCase ("faction")) {
 					if(plugin.permission.has(sender, "swagserv.bountycreate.faction")) {
-						//Check for valid faction 
+						//Check if faction exists 
 						
 					}
 				}

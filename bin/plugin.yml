@@ -1,7 +1,7 @@
 name: Swagserv-Bounties
 main: net.swagserv.jones12.swagservbounties.Bounties
 load: POSTWORLD
-version: 0.03-CCDev
+version: 0.04-Dev
 description: Allows bounties through sign commands.
 depend: [Vault]
 commands:
