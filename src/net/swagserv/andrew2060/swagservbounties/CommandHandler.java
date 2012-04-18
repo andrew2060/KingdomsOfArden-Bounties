@@ -1,6 +1,6 @@
 package net.swagserv.andrew2060.swagservbounties;
 
-import net.swagserv.jones12.swagservbounties.*;
+import net.swagserv.jones12.swagservbounties.Bounties;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,26 +9,27 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-//import com.massivecraft.factions.Faction;
-//import com.massivecraft.factions.P;
+import com.massivecraft.factions.Factions;
+
 //Command Handling for /bounty: faction bounties in FactionCommandHandler
 public class CommandHandler implements CommandExecutor {
 	private Bounties plugin;
-	//private P factions;
+	@SuppressWarnings("unused")
+	private Player player = null;
+	
+	private String posterPlayerName;
+	private String wantedPlayerName;
+	private String factionName;
+	
+	private double temp = 0.00;
+	private double accntBalance = 0.00;
+	private double bountyamount = 0.00;
+	
+	private int killcount = 0;
+	
 	public CommandHandler(Bounties plugin) {
 		this.plugin = plugin;
 	}
-	Player player = null;
-	public String targetplayer;
-	public String bountyplayer;
-	//private Player senderfactionsplayer;
-	//private Player targetfactionsplayer;
-	//private String senderFactionID;
-	//private String targetFactionID;
-	public double bountyamount;
-	public double killcount;
-	double temp=0.00;
-	double accntBalance = 0.00;
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		
 		if(cmd.getName().equalsIgnoreCase("bounty")){ 
@@ -42,57 +43,44 @@ public class CommandHandler implements CommandExecutor {
 			if (args.length > 5) {
 		           return false;
 		        } 
-			if (args.length < 5) {
-		           return false;
-		        }
-			//Function of /bounty create
+
+			//Begin /bounty create implementation
 			if (args[0].equalsIgnoreCase("create")){
-				bountyplayer = sender.getName();
-				targetplayer = args[2];
-				//Check if Factions is enabled
-				//if (Bounties.factionisEnabled = true);
-				//Begin Factions Variable section- remove if no desire to tie in with factions//
-				//Player senderfactionsplayer = Bukkit.getServer().getPlayer(sender.getName());
-				//Player targetfactionsplayer = Bukkit.getServer().getPlayer(args[3]);
-				//DEBUG VARIABLE CONFIRM: REMOVE IN FINAL RELEASE
-				//sender.sendMessage("senderfactionsplayer ==" + senderfactionsplayer);
-				//sender.sendMessage("targetfactionsplayer ==" + targetfactionsplayer);
-				//
-				//senderFactionID = factions.getPlayerFactionTag(Bukkit.getServer().getPlayer(sender.getName())); //Non Functional
-				//targetFactionID = factions.getPlayerFactionTag(Bukkit.getServer().getPlayer(args[2])); //Non Functional
-				//FACTION ID DEBUG--TO BE REMOVED--
-				//sender.sendMessage("senderFactionTag ==" + senderFactionID);
-				//sender.sendMessage("targetFactionTag ==" + targetFactionID);
-				//
-				//End Factions Variable Defining//
-				double bountyamount = Integer.parseInt(args[3]); //This Needs Exception Handling for non-integer inputs
-				double killcount = Integer.parseInt(args[4]);
+				bountyamount = Double.parseDouble(args[3]);
+				killcount = Integer.parseInt(args[4]);
+				
 				//For Players
 				if(args[1].equalsIgnoreCase ("player")) {
-					if(plugin.permission.has(sender, "swagserv.bountycreate.player")) { //Permissions Check
+					if(plugin.permission.has(sender, "bounties.bountycreate.player")) { //Permissions Check
 						//Begin checking validity of command
 						//Check to ensure player exists
-						if(Bukkit.getServer().getPlayer(targetplayer) == null) {
-							//No need to include factions check, since this is being cancelled anyways
+						if(Bukkit.getServer().getPlayer(wantedPlayerName) == null) {
 							sender.sendMessage("Target Player Does Not Exist or is not Online!");
 							return true;
 						}
 					
-						if(Bukkit.getServer().getPlayer(targetplayer) != null) {
+						else if(Bukkit.getServer().getPlayer(wantedPlayerName) != null) {
 							//if(InsertFactionAllianceCheckHere)
 							//Begin Economy Section (Derived from com.gmail.brandonjones1212.swagservbounties.SignListener.java (deprecated))
-							accntBalance = plugin.economy.getBalance(bountyplayer);
-							if(accntBalance < 500+bountyamount) {
+							accntBalance = plugin.economy.getBalance(posterPlayerName);
+							if(accntBalance<500+bountyamount) {
 								temp = (500+bountyamount)-accntBalance;
 					
-								sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on " + targetplayer + " for $" + bountyamount + " as well as the $500 bounty posting fee");
+								sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on " + wantedPlayerName + " for $" + bountyamount + " as well as the $500 bounty posting fee");
 								sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
 							}	
 							else {
-								plugin.getServer().broadcastMessage(ChatColor.YELLOW + "[Bounty]:" + ChatColor.WHITE + " " + ChatColor.AQUA + bountyplayer + ChatColor.WHITE + " placed a hit on " + ChatColor.RED + targetplayer + ChatColor.WHITE + " to be killed " + ChatColor.GOLD + killcount + ChatColor.WHITE + " times for" + ChatColor.DARK_GREEN + " $" + bountyamount + ChatColor.WHITE + ".");
+								plugin.getServer().broadcastMessage(ChatColor.BLUE + "[Bounty]: " + 
+										ChatColor.AQUA + posterPlayerName + 
+										ChatColor.WHITE + " placed a hit on " + ChatColor.RED + wantedPlayerName + 
+										ChatColor.WHITE + " to be killed " + ChatColor.GOLD + killcount + 
+										ChatColor.WHITE + " times for" + ChatColor.DARK_GREEN + " $" + 
+							bountyamount + ChatColor.WHITE + ".");
 								temp = 500+bountyamount;
-								plugin.economy.withdrawPlayer(bountyplayer, temp);
-								sender.sendMessage(ChatColor.YELLOW + "The bounty fee of $" + 500 + " as well as your bounty of" + bountyamount + " has been withdrawn from your account.");
+								plugin.economy.withdrawPlayer(wantedPlayerName, temp);
+								sender.sendMessage(ChatColor.YELLOW + "The bounty fee of " + ChatColor.RED + "$" + 500 +
+										ChatColor.YELLOW + " and your bounty of " + ChatColor.RED + "$" + bountyamount + 
+										ChatColor.YELLOW + " has been withdrawn from your account.");
 							}
 							//End Economy Section: Note that nothing actually happens as of yet 
 							//} End Factions Check If
@@ -101,14 +89,87 @@ public class CommandHandler implements CommandExecutor {
 					}
 				//Insert Else Statement for no perms here (or let bukkit handle it)
 				}
-				if(args[1].equalsIgnoreCase ("faction")) {
-					if(plugin.permission.has(sender, "swagserv.bountycreate.faction")) {
-						//Check if faction exists 
-						
+				else if(args[1].equalsIgnoreCase ("faction")) {
+					if(plugin.permission.has(sender, "bounties.bountycreate.faction")) {
+						//Check for valid faction
+						factionName = args[2];
+						//Factions.i contains all the faction commands we'll need
+						//because it is a static variable it can be used
+						//from any class without being initialized, because it's already
+						//initialized in the Factions class.
+						if(Factions.i.isTagTaken(factionName)) {
+							accntBalance = plugin.economy.getBalance(posterPlayerName);
+							if(accntBalance<500+bountyamount) {
+								temp = (500+bountyamount)-accntBalance;
+					
+								sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on the faction " + 
+												   ChatColor.RED + factionName + " for $" + bountyamount + 
+												   " or the $500 bounty posting fee");
+								sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
+							}
+							else {
+								plugin.getServer().broadcastMessage(ChatColor.BLUE + "[Bounty]: " + 
+										ChatColor.AQUA + posterPlayerName + 
+										ChatColor.WHITE + " placed a hit on the faction " + ChatColor.RED + factionName + 
+										ChatColor.WHITE + " to have members killed " + ChatColor.GOLD + killcount + 
+										ChatColor.WHITE + " times for" + ChatColor.DARK_GREEN + " $" + 
+										bountyamount + ChatColor.WHITE + ".");
+											temp = 500+bountyamount;
+											plugin.economy.withdrawPlayer(wantedPlayerName, temp);
+											sender.sendMessage(ChatColor.YELLOW + "The bounty fee of " + ChatColor.DARK_RED + "$" + 500 + 
+													ChatColor.YELLOW + " and your bounty of " + ChatColor.DARK_RED + "$" + bountyamount + 
+													ChatColor.YELLOW + " has been withdrawn from your account.");
+							}
+							return true;
+						}
+						else if(!Factions.i.isTagTaken(factionName)) {
+							sender.sendMessage("Faction doesn't exist!");
+							return true;
+						}
 					}
 				}
 			}
-			//If this has happened the function will break and return true. if this hasn't happened the a value of false will be returned.
+			//Begin /bounty delete implementation
+			if(args[0].equalsIgnoreCase("delete")){
+				sender.sendMessage("Not Implemented Yet");
+				return true;
+			}
+			//Begin /bounty reload implementation
+			if(args[0].equalsIgnoreCase("reload")){
+				sender.sendMessage("Not Implemented Yet");
+				return true;
+			}
+			//Begin Help Section
+			if(args[0].equalsIgnoreCase("help")){
+				if(args[1]==null){
+					sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
+					sender.sendMessage(ChatColor.RED + "/bounty help create " + ChatColor.GRAY + "- Help With Bounty Creation");
+					sender.sendMessage(ChatColor.RED + "/bounty help delete " + ChatColor.GRAY + "- Help With Bounty Deletion");
+					sender.sendMessage(ChatColor.RED + "/bounty reload " + ChatColor.GRAY + "- Reload Bounty Config");
+					return true;
+				}
+				if(args[1].equalsIgnoreCase("create")){
+					sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
+					sender.sendMessage(ChatColor.RED + "/bounty create [player|faction] [playerorfactionname] [amount] [killcount]");
+					sender.sendMessage(ChatColor.GRAY + "Replace [player|faction] with player or faction as desired");
+					sender.sendMessage(ChatColor.GRAY + "Replace [playerorfactionname] with desired target player or target faction, " +
+							"depending on your previous argument");
+					sender.sendMessage(ChatColor.GRAY + "Replace [amount] with amount you are paying for the bounty");
+					sender.sendMessage(ChatColor.GRAY + "Replace [killcount] with number of times you want the target killed before paying reward," +
+							" in the case of a faction, this is the number of faction members killed");
+					return true;
+				}
+				if(args[1].equalsIgnoreCase("delete")){
+					sender.sendMessage(ChatColor.RED + "/bounty delete [BountyID]" + ChatColor.GRAY + " - Delete Bounty of ID [BountyID]");
+					return true;
+				}
+			}
+			if(args[0] == null){
+			sender.sendMessage(ChatColor.YELLOW + "Swagserv-Bounties Plugin");
+			sender.sendMessage(ChatColor.GRAY + "Developed By Jones12 and Andrew2060 of Minecraft Server www.swagserv.us");
+			sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
+			return true;
+			}
 		}
 		return false; 
 	}

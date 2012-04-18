@@ -1,31 +1,32 @@
 package net.swagserv.jones12.swagservbounties;
+//Class Imports
+import java.util.logging.Logger;
 
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
-import net.swagserv.andrew2060.swagservbounties.CommandHandler;
-
+import net.milkbowl.vault.economy.Economy; //Vault Economy Support
+import net.milkbowl.vault.permission.Permission; //Vault Permissions Support
+import net.swagserv.andrew2060.swagservbounties.CommandHandler; //Command Handler for /bounty
+//Begin Bukkit Class Imports
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-/*
-import com.massivecraft.factions.P;
- */
+//End Bukkit Class Imports
 
 
+@SuppressWarnings("unused")
 public class Bounties extends JavaPlugin {
+	Logger log;
 	private CommandHandler commandHandler;
 	public Economy economy;
 	public Permission permission;
-//  public P factions;
     public boolean factionisEnabled = false;
+    //Begin External Plugin Detection Setup
 	private void setupFactions()
 	{
 		Plugin factions = getServer().getPluginManager().getPlugin("Factions");
-        if (factions != null) {
-//          this.faction = (P) factions;
-            this.factionisEnabled = true;
+        if (factions != null) {            
+        	this.factionisEnabled = true;
+        	log.info("Successfully Hooked Into Factions");
         }
 	}
 	private boolean setupEconomy()
@@ -33,6 +34,7 @@ public class Bounties extends JavaPlugin {
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
+            log.info("Economy Plugin Hooked Through Vault");
         }
 
         return (economy != null);
@@ -42,25 +44,23 @@ public class Bounties extends JavaPlugin {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
             permission = permissionProvider.getProvider();
+            log.info("Permissions Plugin Hooked Through Vault");
         }
         return (permission != null);
     }
 	public void onEnable() {
+		log = this.getLogger();
+		//Enable Status Logging
+		log.info("Initializing...");
+		//Initialize Vault Hooks
 		setupEconomy();
 		setupPermissions();
 		setupFactions();
-//		P factions = (P)this.getServer().getPluginManager().getPlugin("Factions");
+		//Load Config.yml
+		getConfig();
 		commandHandler = new CommandHandler(this);
 		getCommand("bounty").setExecutor(commandHandler);
-		Player[] p = getServer().getOnlinePlayers();
-		String[] playerNames = new String[p.length];
-		for(int i = 0; i < p.length; i++) {
-		playerNames[i] = p[i].getName();
-		getServer().getConsoleSender().sendMessage(playerNames[i]);
+		log.info("Plugin Hooks Successful");
 		//-----------------//
-		}
 	}
-	
-
-	
 }

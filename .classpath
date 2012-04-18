@@ -2,9 +2,17 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/bukkit-1.2.5-R1.2-20120409.035650-1 (1).jar"/>
+	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/bukkit-1.2.5-R1.2-20120409.035650-1 (1).jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jd.bukkit.org/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/Factions.jar"/>
-	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/Vault.jar"/>
+	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/Vault.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/DeathNotifier.jar"/>
 	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/iConomy.jar"/>
 	<classpathentry kind="lib" path="C:/Projects/SwagservBounties/library/craftbukkit-1.2.5-R1.2-20120409.035806-1.jar"/>
