@@ -43,7 +43,37 @@ public class CommandHandler implements CommandExecutor {
 			if (args.length > 5) {
 		           return false;
 		        } 
-
+			if(args.length == 0){
+				sender.sendMessage(ChatColor.AQUA + "======Swagserv-Bounties Plugin======");
+				sender.sendMessage(ChatColor.GRAY + "Developed By Jones12 and Andrew2060 of Minecraft Server www.swagserv.us");
+				sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
+				return true;
+			}
+			//Begin Help Section
+			if(args[0].equalsIgnoreCase("help")){
+				if(args.length == 1){
+					sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
+					sender.sendMessage(ChatColor.RED + "/bounty help create " + ChatColor.GRAY + "- Help With Bounty Creation");
+					sender.sendMessage(ChatColor.RED + "/bounty help delete " + ChatColor.GRAY + "- Help With Bounty Deletion");
+					sender.sendMessage(ChatColor.RED + "/bounty reload " + ChatColor.GRAY + "- Reload Bounty Config");
+					return true;
+				}
+				if(args[1].equalsIgnoreCase("create")){
+					sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
+					sender.sendMessage(ChatColor.RED + "/bounty create [player|faction] [playerorfactionname] [amount] [killcount]");
+					sender.sendMessage(ChatColor.GRAY + "Replace [player|faction] with player or faction as desired");
+					sender.sendMessage(ChatColor.GRAY + "Replace [playerorfactionname] with desired target player or target faction, " +
+							"depending on your previous argument");
+					sender.sendMessage(ChatColor.GRAY + "Replace [amount] with amount you are paying for the bounty");
+					sender.sendMessage(ChatColor.GRAY + "Replace [killcount] with number of times you want the target killed before paying reward," +
+							" in the case of a faction, this is the number of faction members killed");
+					return true;
+				}
+				if(args[1].equalsIgnoreCase("delete")){
+					sender.sendMessage(ChatColor.RED + "/bounty delete [BountyID]" + ChatColor.GRAY + " - Delete Bounty of ID [BountyID]");
+					return true;
+				}
+			}
 			//Begin /bounty create implementation
 			if (args[0].equalsIgnoreCase("create")){
 				bountyamount = Double.parseDouble(args[3]);
@@ -66,7 +96,9 @@ public class CommandHandler implements CommandExecutor {
 							if(accntBalance<500+bountyamount) {
 								temp = (500+bountyamount)-accntBalance;
 					
-								sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on " + wantedPlayerName + " for $" + bountyamount + " as well as the $500 bounty posting fee");
+								sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on the faction " + 
+										   ChatColor.RED + wantedPlayerName + ChatColor.YELLOW + " for" + ChatColor.GREEN + " $" + bountyamount + 
+										   ChatColor.YELLOW + " in addition to the"+ ChatColor.GOLD + " $500" + ChatColor.YELLOW + " bounty posting fee");								
 								sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
 							}	
 							else {
@@ -103,8 +135,8 @@ public class CommandHandler implements CommandExecutor {
 								temp = (500+bountyamount)-accntBalance;
 					
 								sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on the faction " + 
-												   ChatColor.RED + factionName + " for $" + bountyamount + 
-												   " or the $500 bounty posting fee");
+												   ChatColor.RED + factionName + ChatColor.YELLOW + " for" + ChatColor.GREEN + " $" + bountyamount + 
+												   ChatColor.YELLOW + " or the"+ ChatColor.GOLD + " $500" + ChatColor.YELLOW + " bounty posting fee");
 								sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
 							}
 							else {
@@ -116,8 +148,8 @@ public class CommandHandler implements CommandExecutor {
 										bountyamount + ChatColor.WHITE + ".");
 											temp = 500+bountyamount;
 											plugin.economy.withdrawPlayer(wantedPlayerName, temp);
-											sender.sendMessage(ChatColor.YELLOW + "The bounty fee of " + ChatColor.DARK_RED + "$" + 500 + 
-													ChatColor.YELLOW + " and your bounty of " + ChatColor.DARK_RED + "$" + bountyamount + 
+											sender.sendMessage(ChatColor.YELLOW + "The bounty fee of " + ChatColor.RED + "$" + 500 + 
+													ChatColor.YELLOW + " and your bounty of " + ChatColor.RED + "$" + bountyamount + 
 													ChatColor.YELLOW + " has been withdrawn from your account.");
 							}
 							return true;
@@ -139,37 +171,9 @@ public class CommandHandler implements CommandExecutor {
 				sender.sendMessage("Not Implemented Yet");
 				return true;
 			}
-			//Begin Help Section
-			if(args[0].equalsIgnoreCase("help")){
-				if(args[1]==null){
-					sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
-					sender.sendMessage(ChatColor.RED + "/bounty help create " + ChatColor.GRAY + "- Help With Bounty Creation");
-					sender.sendMessage(ChatColor.RED + "/bounty help delete " + ChatColor.GRAY + "- Help With Bounty Deletion");
-					sender.sendMessage(ChatColor.RED + "/bounty reload " + ChatColor.GRAY + "- Reload Bounty Config");
-					return true;
-				}
-				if(args[1].equalsIgnoreCase("create")){
-					sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
-					sender.sendMessage(ChatColor.RED + "/bounty create [player|faction] [playerorfactionname] [amount] [killcount]");
-					sender.sendMessage(ChatColor.GRAY + "Replace [player|faction] with player or faction as desired");
-					sender.sendMessage(ChatColor.GRAY + "Replace [playerorfactionname] with desired target player or target faction, " +
-							"depending on your previous argument");
-					sender.sendMessage(ChatColor.GRAY + "Replace [amount] with amount you are paying for the bounty");
-					sender.sendMessage(ChatColor.GRAY + "Replace [killcount] with number of times you want the target killed before paying reward," +
-							" in the case of a faction, this is the number of faction members killed");
-					return true;
-				}
-				if(args[1].equalsIgnoreCase("delete")){
-					sender.sendMessage(ChatColor.RED + "/bounty delete [BountyID]" + ChatColor.GRAY + " - Delete Bounty of ID [BountyID]");
-					return true;
-				}
-			}
-			if(args[0] == null){
-			sender.sendMessage(ChatColor.YELLOW + "Swagserv-Bounties Plugin");
-			sender.sendMessage(ChatColor.GRAY + "Developed By Jones12 and Andrew2060 of Minecraft Server www.swagserv.us");
-			sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
-			return true;
-			}
+
+			
+
 		}
 		return false; 
 	}

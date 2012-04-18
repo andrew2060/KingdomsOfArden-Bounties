@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy; //Vault Economy Support
 import net.milkbowl.vault.permission.Permission; //Vault Permissions Support
+import net.milkbowl.vault.chat.Chat; //Vault Chat Support
 import net.swagserv.andrew2060.swagservbounties.CommandHandler; //Command Handler for /bounty
 //Begin Bukkit Class Imports
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ public class Bounties extends JavaPlugin {
 	private CommandHandler commandHandler;
 	public Economy economy;
 	public Permission permission;
+	public Chat chat;
     public boolean factionisEnabled = false;
     //Begin External Plugin Detection Setup
 	private void setupFactions()
@@ -48,6 +50,16 @@ public class Bounties extends JavaPlugin {
         }
         return (permission != null);
     }
+    private boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            chat = chatProvider.getProvider();
+            log.info("Chatting Plugin Hooked Through Vault");
+        }
+
+        return (chat != null);
+    }
 	public void onEnable() {
 		log = this.getLogger();
 		//Enable Status Logging
@@ -56,6 +68,7 @@ public class Bounties extends JavaPlugin {
 		setupEconomy();
 		setupPermissions();
 		setupFactions();
+		setupChat();
 		//Load Config.yml
 		getConfig();
 		commandHandler = new CommandHandler(this);
