@@ -70,7 +70,7 @@ public class Bounties extends JavaPlugin {
 		setupFactions();
 		setupChat();
 		//Load Config.yml
-		getConfig();
+		//getConfig();
 		commandHandler = new CommandHandler(this);
 		getCommand("bounty").setExecutor(commandHandler);
 		log.info("Plugin Hooks Successful");

@@ -6,5 +6,5 @@ description: Allows bounties through sign commands.
 depend: [Vault]
 commands:
   bounty:
-    description: Swagserv-Bounties Bounty creation command.
-    usage: The proper command format is /<command> [create/delete] [player/faction] [target] [amount] [killcount]
+    description: Swagserv-Bounties Commands
+    usage: /<command>
