@@ -120,7 +120,7 @@ public class CommandHandler implements CommandExecutor {
 								accntBalance = plugin.economy.getBalance(posterPlayerName);
 								if(accntBalance<500+bountyamount) {
 									temp = (500+bountyamount)-accntBalance;
-									sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on the faction " + 
+									sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on the player " + 
 											ChatColor.RED + wantedPlayerName + ChatColor.YELLOW + " for" + ChatColor.GREEN + " $" + bountyamount + 
 											ChatColor.YELLOW + " in addition to the"+ ChatColor.GOLD + " $500" + ChatColor.YELLOW + " bounty posting fee");								
 									sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
@@ -143,6 +143,7 @@ public class CommandHandler implements CommandExecutor {
 							return true;
 							}
 						}
+						
 				//Insert Else Statement for no perms here (or let bukkit handle it)
 					}
 					else if(args[1].equalsIgnoreCase ("faction")) {
