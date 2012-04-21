@@ -102,10 +102,10 @@ public class CommandHandler implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("create")){
 					bountyamount = Double.parseDouble(args[3]);
 					killcount = Integer.parseInt(args[4]);
-				
+					wantedPlayerName = args[2];
+					posterPlayerName = sender.getName();				
 					//For Players
 					if(args[1].equalsIgnoreCase ("player")) {
-						wantedPlayerName = args[2];
 						if(plugin.permission.has(sender, "bounties.bountycreate.player")) { //Permissions Check
 						//Begin checking validity of command
 						//Check to ensure player exists
