@@ -1,6 +1,6 @@
-
-//MySql Connection Settings
-mysqlserver: 'ServerIP:Port'
-mysqluser: 'Username'
-mysqlpass: 'Password'
-mysqldbname: 'MySQL Database Name'
+MySQL: true
+MySQLhost: localhost
+MySQLport: portnumber
+MySQLuser: username
+MySQLpass: password
+MySQLdb: database

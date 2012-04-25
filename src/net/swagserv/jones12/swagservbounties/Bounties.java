@@ -1,12 +1,15 @@
 package net.swagserv.jones12.swagservbounties;
 //Class Imports
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy; //Vault Economy Support
 import net.milkbowl.vault.permission.Permission; //Vault Permissions Support
 import net.milkbowl.vault.chat.Chat; //Vault Chat Support
 import net.swagserv.andrew2060.swagservbounties.CommandHandler; //Command Handler for /bounty
+import net.swagserv.andrew2060.swagservbounties.MySQLConnection;
 //Begin Bukkit Class Imports
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -22,11 +25,18 @@ public class Bounties extends JavaPlugin {
 	public Permission permission;
 	public Chat chat;
     public boolean factionisEnabled = false;
+	public boolean MySQL;
+	private String dbHost;
+	private int dbPort;
+	private String dbUser;
+	private String dbPass;
+	private String dbDatabase;
+	private net.swagserv.andrew2060.swagservbounties.MySQLConnection sqlHandler;
     //Begin External Plugin Detection Setup
 	private void setupFactions()
 	{
 		Plugin factions = getServer().getPluginManager().getPlugin("Factions");
-        if (factions != null) {            
+        if (factions != null) {             
         	this.factionisEnabled = true;
         	log.info("Successfully Hooked Into Factions");
         }
@@ -60,6 +70,60 @@ public class Bounties extends JavaPlugin {
 
         return (chat != null);
     }
+    private void loadConfig() {
+		getConfig().options().copyDefaults(true);
+		this.MySQL = getConfig().getBoolean("MySQL");
+		this.dbHost = getConfig().getString("MySQLhost", "");
+		this.dbPort = getConfig().getInt("MySQLport");
+		this.dbUser = getConfig().getString("MySQLuser", "");
+		this.dbPass = getConfig().getString("MySQLpass", "");
+		this.dbDatabase = getConfig().getString("MySQLdb", "");
+		saveConfig();
+		
+    }
+    private void loadMySQL() {
+    	if (this.MySQL) {
+ 			// Declare MySQL Handler
+			try {
+				sqlHandler = new MySQLConnection(dbHost, dbPort, dbDatabase, dbUser,
+						dbPass);
+			} catch (InstantiationException e1) {
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			}
+ 			// Initialize MySQL Handler
+ 				if (sqlHandler.connect(true)) {
+ 					log.info("[SwagServ-Bounties] MySQL connection successful");
+ 	 				// Check if the tables exist, if not, create them
+ 					if (!sqlHandler.tableExists(dbDatabase,"bountiesplayer")) {
+ 						log.info("[Swagserv-Bounties] Creating player MySQL table");
+ 						String query = "CREATE TABLE `bountiesplayer` ( `id` int(5) NOT NULL AUTO_INCREMENT, `target` varchar(32) NOT NULL, `poster` varchar(32) NOT NULL, `amount` double(64,2), `killcount` double(64,2), `posttime` bigint(21), `endtime` bigint(21), PRIMARY KEY (`id`) ) AUTO_INCREMENT=1 ;";
+ 						try {
+ 							sqlHandler.executeQuery(query, true);
+ 						} catch (SQLException e) {
+ 							e.printStackTrace();
+ 						}
+ 					}
+ 					if (!sqlHandler.tableExists(dbDatabase,"bountiesfaction")) {
+ 						log.info("[Swagserv-Bounties] Creating faction MySQL table");
+ 						String query = "CREATE TABLE `bountiesfaction` ( `id` int(5) NOT NULL AUTO_INCREMENT, `target` varchar(32) NOT NULL, `poster` varchar(32) NOT NULL, `amount` double(64,2), `killcount` double(64,2), `posttime` bigint(21), `endtime` bigint(21), PRIMARY KEY (`id`) ) AUTO_INCREMENT=1 ;";
+ 						try {
+ 							sqlHandler.executeQuery(query, true);
+ 						} catch (SQLException e) {
+ 							e.printStackTrace();
+ 						}
+ 					}
+ 				} else {
+ 					log.severe("[SwagServ-Bounties] MySQL is necessary");
+ 					this.MySQL = false;
+ 				}
+ 		} else {
+ 			Bukkit.getServer().getPluginManager().disablePlugin(this);
+		}
+    }
 	public void onEnable() {
 		log = this.getLogger();
 		//Enable Status Logging
@@ -70,7 +134,8 @@ public class Bounties extends JavaPlugin {
 		setupFactions();
 		setupChat();
 		//Load Config.yml
-		//getConfig();
+		loadConfig();
+		loadMySQL();
 		commandHandler = new CommandHandler(this);
 		getCommand("bounty").setExecutor(commandHandler);
 		log.info("Plugin Hooks Successful");
