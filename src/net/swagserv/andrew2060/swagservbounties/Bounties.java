@@ -25,12 +25,12 @@ public class Bounties extends JavaPlugin {
 	public Chat chat;
     public boolean factionisEnabled = false;
 	public boolean MySQL;
-	private String dbHost;
-	private int dbPort;
-	private String dbUser;
-	private String dbPass;
-	private String dbDatabase;
-	private MySQLConnection sqlHandler;
+	String dbHost;
+	int dbPort;
+	String dbUser;
+	String dbPass;
+	String dbDatabase;
+	MySQLConnection sqlHandler;
     //Begin External Plugin Detection Setup
 	private void setupFactions()
 	{
@@ -130,7 +130,7 @@ public class Bounties extends JavaPlugin {
 		loadMySQL();
 		commandHandler = new CommandHandler(this);
 		getCommand("bounty").setExecutor(commandHandler);
-		Bukkit.getPluginManager().registerEvents(new PlayerDeathHandler(), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerDeathHandler(this), this);
 		log.info("Plugin Hooks Successful");
 		//-----------------//
 	}

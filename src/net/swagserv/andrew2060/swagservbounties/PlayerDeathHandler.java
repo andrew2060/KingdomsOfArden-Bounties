@@ -11,8 +11,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeathHandler implements Listener {
-	private MySQLConnection sqlHandler;
 	Bounties plugin;
+	MySQLConnection sqlHandler;
+	public PlayerDeathHandler(Bounties bounties) {
+		this.plugin = bounties;
+		try {
+			this.sqlHandler = new MySQLConnection(plugin.dbHost, plugin.dbPort, plugin.dbDatabase, plugin.dbUser,
+					plugin.dbPass);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		sqlHandler.connect();
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPLayerDeath(PlayerDeathEvent event) throws SQLException {
 		Player p = event.getEntity();
@@ -24,7 +39,7 @@ public class PlayerDeathHandler implements Listener {
 		}
 		Player k = p.getKiller();
 		String getResult = "Select * FROM bountiesplayer WHERE target = '" + p.getName() + "'";
-		ResultSet rs = sqlHandler.executeQuery(getResult, false);
+		ResultSet rs = plugin.sqlHandler.executeQuery(getResult, false);
 		rs.last();
 		double payout = rs.getDouble("amount");
 		if(payout == 0) {
@@ -34,13 +49,13 @@ public class PlayerDeathHandler implements Listener {
 		k.sendMessage(ChatColor.AQUA + "[Bounties]: " + ChatColor.GRAY + "You have collected the " + ChatColor.GOLD + "$" + payout + ChatColor.GRAY + " bounty on " + ChatColor.GREEN + p.getName());
 		int id = rs.getInt("id");
 		String update = "DELETE FROM bountiesplayer WHERE id='" + id + "'";
-		sqlHandler.executeQuery(update, true);
+		plugin.sqlHandler.executeQuery(update, true);
 	}
 
 	private boolean checkExists(String wantedPlayerName) {
 		String checkExists = "SELECT * FROM bountiesplayer WHERE target = '"+wantedPlayerName + "'";
 		try {
-			ResultSet checkResult = sqlHandler.executeQuery(checkExists, false);
+			ResultSet checkResult = plugin.sqlHandler.executeQuery(checkExists, false);
 			if(checkResult.last()) {
 				return true;
 			} else {

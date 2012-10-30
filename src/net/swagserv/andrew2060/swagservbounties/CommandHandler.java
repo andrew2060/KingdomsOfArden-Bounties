@@ -26,11 +26,22 @@ public class CommandHandler implements CommandExecutor {
 	private double temp = 0.00;
 	private double accntBalance = 0.00;
 	private double bountyamount = 0.00;
-	
 	private MySQLConnection sqlHandler;
+	
   	
 	public CommandHandler(Bounties plugin) {
 		this.plugin = plugin;
+		try {
+			this.sqlHandler = new MySQLConnection(plugin.dbHost, plugin.dbPort, plugin.dbDatabase, plugin.dbUser,
+					plugin.dbPass);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		sqlHandler.connect();
 	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		if(cmd.getName().equalsIgnoreCase("bounty")){ 
@@ -44,7 +55,7 @@ public class CommandHandler implements CommandExecutor {
 			switch (args.length){
 				case 0: 
 					sender.sendMessage(ChatColor.AQUA + "======Swagserv-Bounties Plugin======");
-					sender.sendMessage(ChatColor.GRAY + "Developed By Jones12 and Andrew2060 of Minecraft Server www.swagserv.us");
+					sender.sendMessage(ChatColor.GRAY + "Developed By Andrew2060 of Minecraft Server www.swagserv.us");
 					sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
 					break;
 				case 1: 
@@ -61,7 +72,8 @@ public class CommandHandler implements CommandExecutor {
 						sender.sendMessage("Not Implemented Yet");
 						break;
 					}
-					break;
+					displayError(sender);
+					return true;
 				case 2: 
 					if(args[0].equalsIgnoreCase("help")){
 						if(args[1].equalsIgnoreCase("create")){
@@ -73,14 +85,24 @@ public class CommandHandler implements CommandExecutor {
 						}
 						if(args[1].equalsIgnoreCase("list")) {
 							sender.sendMessage(ChatColor.RED + "/bounty list [threshold]" + ChatColor.GRAY + " - Lists all currently active bounties with a payout higher than the threshold");
+							break;
 						}
 						if(args[1].equalsIgnoreCase("delete")){
 							sender.sendMessage(ChatColor.RED + "/bounty delete [BountyID]" + ChatColor.GRAY + " - Delete Bounty of ID [BountyID]");
 							break;
 						}
+						displayError(sender);
+						return true;
 					}
 					if(args[0].equalsIgnoreCase("list")) {
-						double lowerbound = Double.parseDouble(args[1]);
+						double lowerbound = 0;
+						try {
+							lowerbound = Double.parseDouble(args[1]);
+						} catch (NumberFormatException e){
+							sender.sendMessage(ChatColor.RED + "This is not a valid lower threshold number!");
+							return true;
+						}
+						sender.sendMessage(ChatColor.AQUA + "=======Bounties List with Payouts Greater Than $" + lowerbound + "=======");
 						try {
 							ResultSet list = sqlHandler.executeQuery("SELECT * FROM bountiesplayer WHERE amount >='" + lowerbound + "'", false);
 							while(list.next()) {
@@ -94,113 +116,123 @@ public class CommandHandler implements CommandExecutor {
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
-						
+						break;
 					}
 					break;
 				case 3: 
 					if(args[0].equalsIgnoreCase("delete")){
 						sender.sendMessage("Not Implemented Yet");
+						break;
 					}
-					if (args[0].equalsIgnoreCase("create")){
+					if(args[0].equalsIgnoreCase("create")){
 						bountyamount = Double.parseDouble(args[2]);
+						if(bountyamount <= 0) {
+							sender.sendMessage(ChatColor.RED + "Bounties cannot be set at a 0 or negative value!");
+							return true;
+						}
 						wantedPlayerName = args[1];
 						posterPlayerName = sender.getName();				
 						//For Players
-						if(args[1].equalsIgnoreCase ("player")) {
-							if(plugin.permission.has(sender, "bounties.create")) { //Permissions Check
-								//Begin checking validity of command
-								//Check to ensure player exists
-								if(Bukkit.getServer().getPlayer(wantedPlayerName) == null) {
-									sender.sendMessage("Target Player Does Not Exist or is not online!");
-								return true;
-								}
-								else if(Bukkit.getServer().getPlayer(wantedPlayerName) != null) {
-									FPlayer fpWanted = FPlayers.i.get(Bukkit.getServer().getPlayer(wantedPlayerName));
-									FPlayer fpPoster = FPlayers.i.get(Bukkit.getServer().getPlayer(sender.getName()));
-									Faction fWanted = fpWanted.getFaction();
-									Faction fPoster = fpPoster.getFaction();
-									if(fWanted.getRelationTo(fPoster).equals(Rel.ALLY) || fWanted.getRelationTo(fPoster).equals(Rel.TRUCE)) {
-										sender.sendMessage(ChatColor.GRAY + "You cannot create a bounty on an ally/truced faction member!");
-										return true;
-									} else if (fWanted == fPoster) {
-										sender.sendMessage(ChatColor.GRAY + "You cannot create a bounty on your own factionmates! How absolutely rude!");
-										return true;
-									} else {
-										accntBalance = plugin.economy.getBalance(posterPlayerName);
-										if(accntBalance<500+bountyamount) {
-											temp = (500+bountyamount)-accntBalance;
-											sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on the player " + 
-													ChatColor.RED + wantedPlayerName + ChatColor.YELLOW + " for" + ChatColor.GREEN + " $" + bountyamount + 
-													ChatColor.YELLOW + " in addition to the"+ ChatColor.GOLD + " $500" + ChatColor.YELLOW + " bounty posting fee");								
-											sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
-										}
-										else {
-											plugin.getServer().broadcastMessage(ChatColor.BLUE + "[Bounty]: " + 
-													ChatColor.AQUA + posterPlayerName + 
-													ChatColor.WHITE + " placed a hit on " + ChatColor.RED + wantedPlayerName + 
-													ChatColor.WHITE + " to be killed for" + ChatColor.DARK_GREEN + " $" + 
-													bountyamount + ChatColor.GRAY + ".");
-											temp = 500+bountyamount;
-											plugin.economy.withdrawPlayer(wantedPlayerName, temp);
-											sender.sendMessage(ChatColor.YELLOW + "The bounty fee of " + ChatColor.RED + "$" + 500 +
-													ChatColor.YELLOW + " and your bounty of " + ChatColor.RED + "$" + bountyamount + 
-													ChatColor.YELLOW + " has been withdrawn from your account.");
-											if (plugin.MySQL = true) {
-												if(checkExists(wantedPlayerName)) {
-													String checkExists = "SELECT * FROM bountiesplayer WHERE target = '"+wantedPlayerName + "'";
-													try {
-														ResultSet rs = sqlHandler.executeQuery(checkExists, false);
-														rs.last();
-														int id = rs.getInt("id");
-														double currentbounty = rs.getDouble("amount");
-														double newbounty = currentbounty + bountyamount;
-														String update = "UPDATE bountiesplayer SET amount='" + newbounty + "' WHERE id='"+id+"'";
-														sqlHandler.executeQuery(update, true);
-													} catch (SQLException e){
-														e.printStackTrace();
-													}
-												} else {
-								 					String query = "INSERT INTO bountiesplayer (target,amount) VALUES ('" 
-								 							+ wantedPlayerName + "', '" + bountyamount + "')";
-								 					try {
-								 						sqlHandler.executeQuery(query, true);
-								 					} catch (SQLException e) {
-								 						e.printStackTrace();
-								 					}
-												}
-											}
-										}
-	
-										//End Economy Section: Note that nothing actually happens as of yet 
-									} //End Factions Check If
-								}
+						if(plugin.permission.has(sender, "bounties.create")) { //Permissions Check
+							//Begin checking validity of command
+							//Check to ensure player exists
+							if(Bukkit.getServer().getPlayer(wantedPlayerName) == null) {
+								sender.sendMessage("Target Player Does Not Exist or is not online!");
+							return true;
 							}
-							//Insert Else Statement for no perms here (or let bukkit handle it)
+							else if(Bukkit.getServer().getPlayer(wantedPlayerName) != null) {			
+								FPlayer fpWanted = FPlayers.i.get(Bukkit.getServer().getPlayer(wantedPlayerName));
+								FPlayer fpPoster = FPlayers.i.get(Bukkit.getServer().getPlayer(sender.getName()));
+								Faction fWanted = fpWanted.getFaction();
+								Faction fPoster = fpPoster.getFaction();
+								if(fWanted.getRelationTo(fPoster).equals(Rel.ALLY) || fWanted.getRelationTo(fPoster).equals(Rel.TRUCE)) {
+									sender.sendMessage(ChatColor.GRAY + "You cannot create a bounty on an ally/truced faction member!");
+									return true;
+								}
+								if (fWanted == fPoster) {
+									sender.sendMessage(ChatColor.GRAY + "You cannot create a bounty on your own factionmates! How absolutely rude!");
+									return true;
+								} else {
+									accntBalance = plugin.economy.getBalance(posterPlayerName);
+									if(accntBalance<bountyamount*1.1) {
+										temp = (bountyamount*1.1)-accntBalance;
+										sender.sendMessage(ChatColor.YELLOW + "You do not have enough money to place a bounty on the player " + 
+												ChatColor.RED + wantedPlayerName + ChatColor.YELLOW + " for" + ChatColor.GREEN + " $" + bountyamount + 
+												ChatColor.YELLOW + " in addition to the"+ ChatColor.GOLD + " $" + bountyamount*0.1 + ChatColor.YELLOW + " bounty posting fee");								
+										sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
+									}
+									plugin.getServer().broadcastMessage(ChatColor.BLUE + "[Bounty]: " + 
+											ChatColor.AQUA + posterPlayerName + 
+											ChatColor.WHITE + " placed a hit on " + ChatColor.RED + wantedPlayerName + 
+											ChatColor.WHITE + " to be killed for" + ChatColor.DARK_GREEN + " $" + 
+											bountyamount + ChatColor.GRAY + ".");
+									temp = bountyamount*1.1;
+									plugin.economy.withdrawPlayer(wantedPlayerName, temp);
+									sender.sendMessage(ChatColor.YELLOW + "The bounty fee of " + ChatColor.RED + "$" + bountyamount*0.1 +
+											ChatColor.YELLOW + " and your bounty of " + ChatColor.RED + "$" + bountyamount + 
+											ChatColor.YELLOW + " has been withdrawn from your account.");
+									if (plugin.MySQL = true) {
+										if(checkExists(wantedPlayerName) == 1) {
+											String checkExists = "SELECT * FROM bountiesplayer WHERE target = '"+wantedPlayerName + "'";
+											try {
+												ResultSet rs = sqlHandler.executeQuery(checkExists, false);
+												rs.last();
+												int id = rs.getInt("id");
+												double currentbounty = rs.getDouble("amount");
+												double newbounty = currentbounty + bountyamount;
+												String update = "UPDATE bountiesplayer SET amount='" + newbounty + "' WHERE id='"+id+"'";
+												sqlHandler.executeQuery(update, true);
+											} catch (SQLException e){
+												e.printStackTrace();
+											}
+										} else {
+						 					String query = "INSERT INTO bountiesplayer (target,amount) VALUES ('" 
+						 							+ wantedPlayerName + "', '" + bountyamount + "')";
+						 					try {
+						 						sqlHandler.executeQuery(query, true);
+						 					} catch (SQLException e) {
+						 						e.printStackTrace();
+						 					}
+										}
+									}
+
+									//End Economy Section: Note that nothing actually happens as of yet 
+								} 
+							}
+							return true;
+						} else {
+							sender.sendMessage(ChatColor.RED + "No Permissions!");
+							return true;
 						}
 					}
+					displayError(sender);
 					break;
 				default:
-					sender.sendMessage(ChatColor.AQUA + "======Swagserv-Bounties Plugin======");
-					sender.sendMessage(ChatColor.RED + "Invalid Command");
-					sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
+					displayError(sender);
 					break;
 			}
 		}
         return true;
     }
-	public boolean checkExists(String wantedPlayerName) {
+	public void displayError(CommandSender sender) {
+		sender.sendMessage(ChatColor.AQUA + "======Swagserv-Bounties Plugin======");
+		sender.sendMessage(ChatColor.RED + "Invalid Command");
+		sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
+		return;
+	}
+	public int checkExists(String wantedPlayerName) {
 		String checkExists = "SELECT * FROM bountiesplayer WHERE target = '"+wantedPlayerName + "'";
 		try {
-			ResultSet checkResult = sqlHandler.executeQuery(checkExists, false);
+			ResultSet checkResult = sqlHandler .executeQuery(checkExists, false);
 			if(checkResult.last()) {
-				return true;
+				return 1;
 			} else {
-				return false;
+				return 0;
 			}
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
-		return false;
+		return 0;
 		
 	}
 }
