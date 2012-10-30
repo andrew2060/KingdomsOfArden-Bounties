@@ -130,6 +130,7 @@ public class Bounties extends JavaPlugin {
 		loadMySQL();
 		commandHandler = new CommandHandler(this);
 		getCommand("bounty").setExecutor(commandHandler);
+		Bukkit.getPluginManager().registerEvents(new PlayerDeathHandler(), this);
 		log.info("Plugin Hooks Successful");
 		//-----------------//
 	}
