@@ -102,8 +102,8 @@ public class CommandHandler implements CommandExecutor {
 						sender.sendMessage("Not Implemented Yet");
 					}
 					if (args[0].equalsIgnoreCase("create")){
-						bountyamount = Double.parseDouble(args[3]);
-						wantedPlayerName = args[2];
+						bountyamount = Double.parseDouble(args[2]);
+						wantedPlayerName = args[1];
 						posterPlayerName = sender.getName();				
 						//For Players
 						if(args[1].equalsIgnoreCase ("player")) {
