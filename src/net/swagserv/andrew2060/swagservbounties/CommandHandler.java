@@ -18,9 +18,6 @@ import com.massivecraft.factions.struct.Rel;
 //Command Handling for /bounty: faction bounties in FactionCommandHandler
 public class CommandHandler implements CommandExecutor {
 	private Bounties plugin;
-	@SuppressWarnings("unused")
-	private Player player = null;
-	
 	private String posterPlayerName;
 	private String wantedPlayerName;
 	private double temp = 0.00;
@@ -45,13 +42,10 @@ public class CommandHandler implements CommandExecutor {
 	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		if(cmd.getName().equalsIgnoreCase("bounty")){ 
-			if ((sender instanceof Player)) {
-					player = (Player) sender;
-		        } 
-				else {
+			if (!(sender instanceof Player)) {
 					sender.sendMessage("This command cannot be run from the console!");
-					return true;
-		        }
+					return true;		        
+			} 
 			switch (args.length){
 				case 0: 
 					sender.sendMessage(ChatColor.AQUA + "======Swagserv-Bounties Plugin======");
