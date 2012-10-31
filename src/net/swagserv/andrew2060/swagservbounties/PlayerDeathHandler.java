@@ -3,6 +3,7 @@ package net.swagserv.andrew2060.swagservbounties;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,6 +35,9 @@ public class PlayerDeathHandler implements Listener {
 		if(p.getKiller() == null) {
 			return;
 		}
+		if(p.getKiller() == p) {
+			return;
+		}
 		if(!checkExists(p.getName())) {
 			return;
 		}
@@ -46,7 +50,7 @@ public class PlayerDeathHandler implements Listener {
 			return;
 		}
 		plugin.economy.depositPlayer(p.getName(), payout);
-		k.sendMessage(ChatColor.AQUA + "[Bounties]: " + ChatColor.GRAY + "You have collected the " + ChatColor.GOLD + "$" + payout + ChatColor.GRAY + " bounty on " + ChatColor.GREEN + p.getName());
+		Bukkit.getServer().broadcastMessage(ChatColor.AQUA + "[Bounties]: " + ChatColor.GREEN + k.getName() + ChatColor.GRAY + " has collected the " + ChatColor.GOLD + "$" + payout + ChatColor.GRAY + " bounty on " + ChatColor.GREEN + p.getName());
 		int id = rs.getInt("id");
 		String update = "DELETE FROM bountiesplayer WHERE id='" + id + "'";
 		plugin.sqlHandler.executeQuery(update, true);
