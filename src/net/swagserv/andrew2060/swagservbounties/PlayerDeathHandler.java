@@ -49,7 +49,7 @@ public class PlayerDeathHandler implements Listener {
 		if(payout == 0) {
 			return;
 		}
-		plugin.economy.depositPlayer(p.getName(), payout);
+		plugin.economy.depositPlayer(k.getName(), payout);
 		Bukkit.getServer().broadcastMessage(ChatColor.AQUA + "[Bounties]: " + ChatColor.GREEN + k.getName() + ChatColor.GRAY + " has collected the " + ChatColor.GOLD + "$" + payout + ChatColor.GRAY + " bounty on " + ChatColor.GREEN + p.getName());
 		int id = rs.getInt("id");
 		String update = "DELETE FROM bountiesplayer WHERE id='" + id + "'";

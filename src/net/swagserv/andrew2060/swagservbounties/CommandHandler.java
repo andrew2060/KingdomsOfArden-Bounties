@@ -161,7 +161,7 @@ public class CommandHandler implements CommandExecutor {
 											ChatColor.WHITE + " to be killed for" + ChatColor.DARK_GREEN + " $" + 
 											bountyamount + ChatColor.GRAY + ".");
 									temp = bountyamount*1.1;
-									plugin.economy.withdrawPlayer(wantedPlayerName, temp);
+									plugin.economy.withdrawPlayer(sender.getName(), temp);
 									sender.sendMessage(ChatColor.YELLOW + "The bounty fee of " + ChatColor.RED + "$" + bountyamount*0.1 +
 											ChatColor.YELLOW + " and your bounty of " + ChatColor.RED + "$" + bountyamount + 
 											ChatColor.YELLOW + " has been withdrawn from your account.");
