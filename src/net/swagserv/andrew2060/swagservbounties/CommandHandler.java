@@ -119,6 +119,12 @@ public class CommandHandler implements CommandExecutor {
 						break;
 					}
 					if(args[0].equalsIgnoreCase("create")){
+						try {
+							Double.parseDouble(args[2]);
+						} catch (NumberFormatException e) {
+							sender.sendMessage(ChatColor.RED + "This is not a valid bounty amount!");
+							return true;
+						}
 						bountyamount = Double.parseDouble(args[2]);
 						if(bountyamount <= 0) {
 							sender.sendMessage(ChatColor.RED + "Bounties cannot be set at a 0 or negative value!");
@@ -154,6 +160,7 @@ public class CommandHandler implements CommandExecutor {
 												ChatColor.RED + wantedPlayerName + ChatColor.YELLOW + " for" + ChatColor.GREEN + " $" + bountyamount + 
 												ChatColor.YELLOW + " in addition to the"+ ChatColor.GOLD + " $" + bountyamount*0.1 + ChatColor.YELLOW + " bounty posting fee");								
 										sender.sendMessage(ChatColor.YELLOW + "You need $" + temp + " more.");
+										return true;
 									}
 									plugin.getServer().broadcastMessage(ChatColor.BLUE + "[Bounty]: " + 
 											ChatColor.AQUA + posterPlayerName + 
