@@ -30,7 +30,7 @@ public class Bounties extends JavaPlugin {
 	String dbUser;
 	String dbPass;
 	String dbDatabase;
-	MySQLConnection sqlHandler;
+	SQLHandler sqlHandler;
     //Begin External Plugin Detection Setup
 	private void setupFactions()
 	{
@@ -84,7 +84,7 @@ public class Bounties extends JavaPlugin {
     	if (this.MySQL) {
  			// Declare MySQL Handler
 			try {
-				sqlHandler = new MySQLConnection(dbHost, dbPort, dbDatabase, dbUser,
+				sqlHandler = new SQLHandler(dbHost, dbPort, dbDatabase, dbUser,
 						dbPass);
 			} catch (InstantiationException e1) {
 				e1.printStackTrace();

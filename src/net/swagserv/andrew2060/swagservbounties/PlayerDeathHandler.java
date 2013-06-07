@@ -13,11 +13,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeathHandler implements Listener {
 	Bounties plugin;
-	MySQLConnection sqlHandler;
+	SQLHandler sqlHandler;
 	public PlayerDeathHandler(Bounties bounties) {
 		this.plugin = bounties;
 		try {
-			this.sqlHandler = new MySQLConnection(plugin.dbHost, plugin.dbPort, plugin.dbDatabase, plugin.dbUser,
+			this.sqlHandler = new SQLHandler(plugin.dbHost, plugin.dbPort, plugin.dbDatabase, plugin.dbUser,
 					plugin.dbPass);
 		} catch (InstantiationException e) {
 			e.printStackTrace();

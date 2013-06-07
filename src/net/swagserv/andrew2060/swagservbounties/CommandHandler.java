@@ -23,13 +23,13 @@ public class CommandHandler implements CommandExecutor {
 	private double temp = 0.00;
 	private double accntBalance = 0.00;
 	private double bountyamount = 0.00;
-	private MySQLConnection sqlHandler;
+	private SQLHandler sqlHandler;
 	
   	
 	public CommandHandler(Bounties plugin) {
 		this.plugin = plugin;
 		try {
-			this.sqlHandler = new MySQLConnection(plugin.dbHost, plugin.dbPort, plugin.dbDatabase, plugin.dbUser,
+			this.sqlHandler = new SQLHandler(plugin.dbHost, plugin.dbPort, plugin.dbDatabase, plugin.dbUser,
 					plugin.dbPass);
 		} catch (InstantiationException e) {
 			e.printStackTrace();

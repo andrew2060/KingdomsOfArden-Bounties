@@ -17,7 +17,7 @@ import java.util.List;
  *	This class is a simple database connector with the basic useful methods such as getting the number of rows in a table,
  *  the names of columns in the table, etc.
  */
-public class MySQLConnection {
+public class SQLHandler {
 	/*The host for the database, the username for the database, and the password*/
 	private final String dbUrl,	dbUsername, dbPassword;
 
@@ -34,9 +34,9 @@ public class MySQLConnection {
 	 * @param password The password for the database
 	 * @return The resulting MySQLConnection. Returns null if there was an error.
 	 */
-	public static MySQLConnection newJDBCConnection(String host, int port, String database, String username, String password) {
+	public static SQLHandler newJDBCConnection(String host, int port, String database, String username, String password) {
 		try {
-			return new MySQLConnection(host, port, database, username, password);
+			return new SQLHandler(host, port, database, username, password);
 		} catch (Exception e) {
 			return null;
 		}
@@ -49,7 +49,7 @@ public class MySQLConnection {
 	 * @param password The password for the database
 	 * @return The resulting MySQLConnection. Returns null if there was an error
 	 */
-	public static MySQLConnection newJDBCConnection(String host, int port, String username, String password) {
+	public static SQLHandler newJDBCConnection(String host, int port, String username, String password) {
 		return newJDBCConnection(host, port, "", username, password);
 	}
 	/**
@@ -59,11 +59,11 @@ public class MySQLConnection {
 	 * @param password The password for the database
 	 * @return The resulting MySQLConnection. Returns null if there was an error.
 	 */
-	public static MySQLConnection newJDBCConnection(String host, String username, String password) {
+	public static SQLHandler newJDBCConnection(String host, String username, String password) {
 		return newJDBCConnection(host, 3306, "", username, password);
 	}
 
-	public MySQLConnection(String host, int port, String database, String username, String password) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public SQLHandler(String host, int port, String database, String username, String password) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		this.dbUrl = host + ":" + port + "/" + database;
 		this.dbUsername = username;
 		this.dbPassword = password;
