@@ -13,5 +13,6 @@
 			<attribute name="javadoc_location" value="file:/C:/Users/Andrew/Java Projects/lib/Libkit-JD/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Andrew/Java Projects/lib/BattleArena.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
