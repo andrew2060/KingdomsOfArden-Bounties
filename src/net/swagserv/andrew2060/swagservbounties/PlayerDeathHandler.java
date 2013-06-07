@@ -3,6 +3,8 @@ package net.swagserv.andrew2060.swagservbounties;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import mc.alk.arena.BattleArena;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -45,6 +47,9 @@ public class PlayerDeathHandler implements Listener {
 		String getResult = "Select * FROM bountiesplayer WHERE target = '" + p.getName() + "'";
 		ResultSet rs = plugin.sqlHandler.executeQuery(getResult, false);
 		rs.last();
+		if(BattleArena.inArena(p)) {
+			return;
+		}
 		double payout = rs.getDouble("amount");
 		if(payout == 0) {
 			return;
