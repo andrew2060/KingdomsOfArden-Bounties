@@ -29,7 +29,7 @@ public class Bounties extends JavaPlugin {
 	int dbPort;
 	String dbUser;
 	String dbPass;
-	String dbDatabase;
+	String dbDatabase; 
 	SQLHandler sqlHandler;
     //Begin External Plugin Detection Setup
 	private void setupFactions()
