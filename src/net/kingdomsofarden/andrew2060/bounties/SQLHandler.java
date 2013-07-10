@@ -1,4 +1,4 @@
-package net.swagserv.andrew2060.swagservbounties;
+package net.kingdomsofarden.andrew2060.bounties;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

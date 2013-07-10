@@ -1,4 +1,4 @@
-package net.swagserv.andrew2060.swagservbounties;
+package net.kingdomsofarden.andrew2060.bounties;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,13 +48,13 @@ public class CommandHandler implements CommandExecutor {
 			} 
 			switch (args.length){
 				case 0: 
-					sender.sendMessage(ChatColor.AQUA + "======Swagserv-Bounties Plugin======");
-					sender.sendMessage(ChatColor.GRAY + "Developed By Andrew2060 of Minecraft Server www.swagserv.us");
+					sender.sendMessage(ChatColor.AQUA + "======Kingdoms of Arden-Bounties Plugin======");
+					sender.sendMessage(ChatColor.GRAY + "Developed By Andrew2060 of Minecraft Server www.Kingdoms of Arden.us");
 					sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
 					break;
 				case 1: 
 					if(args[0].equalsIgnoreCase("help")){
-						sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
+						sender.sendMessage(ChatColor.AQUA + "=======Kingdoms of Arden-Bounties Help=======");
 						sender.sendMessage(ChatColor.RED + "/bounty" + ChatColor.GRAY + " - Bounty Plugin Info");
 						sender.sendMessage(ChatColor.RED + "/bounty help list" + ChatColor.GRAY + " - Help Viewing Currently Active Bounties");
 						sender.sendMessage(ChatColor.RED + "/bounty help create " + ChatColor.GRAY + "- Help With Bounty Creation");
@@ -71,7 +71,7 @@ public class CommandHandler implements CommandExecutor {
 				case 2: 
 					if(args[0].equalsIgnoreCase("help")){
 						if(args[1].equalsIgnoreCase("create")){
-							sender.sendMessage(ChatColor.AQUA + "=======Swagserv-Bounties Help=======");
+							sender.sendMessage(ChatColor.AQUA + "=======Kingdoms of Arden-Bounties Help=======");
 							sender.sendMessage(ChatColor.RED + "/bounty create [playername] [amount]");
 							sender.sendMessage(ChatColor.GRAY + "Replace [playername] with desired target player.");
 							sender.sendMessage(ChatColor.GRAY + "Replace [amount] with amount you are paying for the bounty");
@@ -216,7 +216,7 @@ public class CommandHandler implements CommandExecutor {
         return true;
     }
 	public void displayError(CommandSender sender) {
-		sender.sendMessage(ChatColor.AQUA + "======Swagserv-Bounties Plugin======");
+		sender.sendMessage(ChatColor.AQUA + "======Kingdoms of Arden-Bounties Plugin======");
 		sender.sendMessage(ChatColor.RED + "Invalid Command");
 		sender.sendMessage(ChatColor.GRAY + "For Help, use " + ChatColor.RED + "/bounty help");
 		return;

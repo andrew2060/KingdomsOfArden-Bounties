@@ -1,10 +1,10 @@
-name: Swagserv-Bounties
-main: net.swagserv.andrew2060.swagservbounties.Bounties
+name: KingdomsOfArden-Bounties
+main: net.kingdomsofarden.andrew2060.swagservbounties.Bounties
 load: POSTWORLD
 version: 1.10
 description: Allows bounties through commands.
 depend: [Vault]
 commands:
   bounty:
-    description: Swagserv-Bounties Commands
+    description: KingdomsOfArden-Bounties Commands
     usage: /<command>
