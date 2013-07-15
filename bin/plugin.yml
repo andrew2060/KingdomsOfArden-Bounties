@@ -1,5 +1,5 @@
 name: KingdomsOfArden-Bounties
-main: net.kingdomsofarden.andrew2060.swagservbounties.Bounties
+main: net.kingdomsofarden.andrew2060.bounties.Bounties
 load: POSTWORLD
 version: 1.10
 description: Allows bounties through commands.
