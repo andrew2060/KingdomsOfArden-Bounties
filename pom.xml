@@ -1,38 +1,63 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.kingdomsofarden</groupId>
-  <artifactId>bounties</artifactId>
-  <version>1.0.0</version>
-  <name>Kingdoms of Arden Bounties</name>
-  <description>Bounties Plugin for Kingdoms of Arden Server</description>
-  <repositories>
-  	<repository>
-  		<id>bukkit-repo</id>
-  		<url>http://repo.bukkit.org</url>
-  	</repository>
-  </repositories>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.bukkit</groupId>
-  		<artifactId>bukkit</artifactId>
-  		<version>1.6.2-R0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
-  <organization>
-  	<name>Kingdoms of Arden Development</name>
-  	<url>www.kingdomsofarden.net</url>
-  </organization>
-  <url>www.kingdomsofarden.net</url>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.kingdomsofarden</groupId>
+	<artifactId>bounties</artifactId>
+	<version>1.0.0</version>
+	<name>Kingdoms of Arden Bounties</name>
+	<description>Bounties Plugin for Kingdoms of Arden Server</description>
+	<repositories>
+		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org</url>
+		</repository>
+		<repository>
+			<id>factions-repo</id>
+			<url>http://minor.royaldev.org:8081/nexus/content/repositories/public/</url>
+		</repository>
+		<repository>
+			<id>heroes-repo</id>
+			<url>http://nexus.theyeticave.net/content/groups/herocraft/</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>Bukkit</artifactId>
+			<version>1.6.2-R0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.massivecraft</groupId>
+			<artifactId>factions</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>Vault</artifactId>
+			<version>1.2.26-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>mc.alk</groupId>
+			<artifactId>BattleArena</artifactId>
+			<version>3.8.3.4</version>
+		</dependency>
+	</dependencies>
+	<organization>
+		<name>Kingdoms of Arden Development</name>
+		<url>www.kingdomsofarden.net</url>
+	</organization>
+	<url>www.kingdomsofarden.net</url>
 </project>
