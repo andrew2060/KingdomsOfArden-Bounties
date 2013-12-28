@@ -54,6 +54,11 @@
 			<artifactId>BattleArena</artifactId>
 			<version>3.8.3.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.earth2me</groupId>
+			<artifactId>essentials</artifactId>
+			<version>2.11.1</version>
+		</dependency>
 	</dependencies>
 	<organization>
 		<name>Kingdoms of Arden Development</name>
